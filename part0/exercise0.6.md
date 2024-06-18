@@ -11,5 +11,5 @@ sequenceDiagram
     server-->>browser: {"message":"note created"}
     deactivate server
 
-    Note right of browser: Status code: 201 - new note has been sent to the server
+    Note right of browser: Status code: 201 - new note has been sent to the server and rendered to the website
 ```
