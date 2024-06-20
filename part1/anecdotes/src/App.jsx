@@ -19,19 +19,24 @@ const App = () => {
 
   const getRandomIndex = () => Math.floor(Math.random() * anecdotes.length)
 
+  const getMaxIndex = () => {
+    const maxValue = Math.max(...points)
+    return points.indexOf(maxValue)
+  }
+
   const handleClick = () => {
       setSelected(getRandomIndex())
   }
 
   const handleVote = () => {
-    const index = selected
     const updatedArray = [...points]
-    updatedArray[index] += 1
+    updatedArray[selected] += 1
     setPoints(updatedArray)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <div>{anecdotes[selected]}</div>
       <div>has {points[selected]} votes</div>
       <button onClick={handleVote}>
@@ -40,6 +45,9 @@ const App = () => {
       <button onClick={handleClick}>
         next anecdote
       </button>
+      <h1>Anecdote with the most votes</h1>
+      <div>{anecdotes[getMaxIndex()]}</div>
+      <div>has {points[getMaxIndex()]} votes</div>
     </div>
   )
 }
