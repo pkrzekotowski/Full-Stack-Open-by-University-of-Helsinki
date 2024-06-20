@@ -17,7 +17,14 @@ const App = () => {
 
   console.log(points)
 
-  const getRandomIndex = () => Math.floor(Math.random() * anecdotes.length)
+  const getRandomIndex = () => {
+   while(true) {
+    const randomIndex =  Math.floor(Math.random() * anecdotes.length)
+    if (randomIndex !== selected)
+      return randomIndex
+   }
+
+  }
 
   const getMaxIndex = () => {
     const maxValue = Math.max(...points)
