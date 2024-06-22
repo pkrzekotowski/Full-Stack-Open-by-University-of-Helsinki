@@ -11,15 +11,25 @@ const App = () => {
     setNewName(e.target.value)
   }
 
-const addNewPerson = (e) => {
-  e.preventDefault()
-  const newPerson = {
-    name: newName
-  }
+  const isContactInPhonebook = () =>
+    persons.some(obj => obj.name.toLowerCase() === newName.toLowerCase())
 
-  setPersons(persons.concat(newPerson))
-  setNewName('')
-}
+
+  const addNewPerson = (e) => {
+    e.preventDefault()
+
+    if (isContactInPhonebook()) {
+      alert(`${newName} is already in the phonebook`)
+      return
+    }
+
+    const newPerson = {
+      name: newName
+    }
+
+    setPersons(persons.concat(newPerson))
+    setNewName('')
+  }
 
   return (
     <div>
