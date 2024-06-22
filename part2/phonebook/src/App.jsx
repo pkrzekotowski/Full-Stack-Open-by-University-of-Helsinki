@@ -44,7 +44,11 @@ const App = () => {
       number: newNumber
     }
 
-    setPersons(persons.concat(newPerson))
+    const newPersons = persons.concat(newPerson)
+
+    setPersons(newPersons)
+    setFilteredPersons(newPersons)
+
     setNewName('')
     setNewNumber('')
   }
