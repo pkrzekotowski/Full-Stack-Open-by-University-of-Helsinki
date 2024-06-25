@@ -21,14 +21,16 @@ const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => (
     </form>
 )
 
-const Persons = ({ persons, filter }) => (
+const Persons = ({ persons, keyword }) => {
+  return (
     <div>
       {persons
-        .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-        .map(person => <div key={person.id}> {person.name} {person.number}</div>)
-      }
-    </div>
- )
+          .filter(person => person.name.toLowerCase().includes(keyword.toLowerCase()))
+          .map(person => <div key={person.id}>{person.name} {person.number}</div>)
+        }
+  </div>
+  )
+}
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -38,8 +40,10 @@ const App = () => {
   useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
-      .then(response => setPersons(response.data))
-  }, [])
+      .then(response => {
+        setPersons(response.data)
+      })
+    }, [])
 
   const handleFormChange = (event, field) =>
     setNewPerson({...newPerson, [field]: event.target.value})
@@ -61,7 +65,7 @@ const App = () => {
 
     newPerson.id = persons.length + 1,
 
-    setPersons(newPerson)
+    setPersons(persons.concat(newPerson))
     setNewPerson({ name: '', number: '', id: ''})
   }
 
@@ -75,7 +79,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newPerson={newPerson} handleFormChange={handleFormChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} keyword={filter} />
     </div>
   )
 }
