@@ -1,19 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const Filter = ({ filter, handleFiltering }) => {
-  return(
-    <div>
-      filter shown with: <input
-        value={filter}
-        onChange={handleFiltering}
-      />
-    </div>
- )
-}
+const Filter = ({ filter, handleFiltering }) => (
+  <div>
+      filter shown with: <input value={filter} onChange={handleFiltering} />
+  </div>
+)
 
-const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => {
-  return (
+const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => (
     <form onSubmit={addNewPerson}>
       <div>
         name: <input value={newPerson.name} onChange={event => handleFormChange(event, 'name')} />
@@ -25,63 +19,54 @@ const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => {
         <button type="submit">add</button>
       </div>
     </form>
-  )
-}
+)
 
-const Persons = ({ filteredPersons }) => {
-  return (
+const Persons = ({ persons, filter }) => (
     <div>
-      {filteredPersons.map(person =>
-        <div key={person.name}>{person.name} {person.number}</div>
-        )}
+      {persons
+        .filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
+        .map(person => <div key={person.id}> {person.name} {person.number}</div>)
+      }
     </div>
-  )
-}
+ )
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newPerson, setNewPerson] = useState({name: '', number: ''})
+  const [newPerson, setNewPerson] = useState({name: '', number: '', id: ''})
   const [filter, setFilter] = useState('')
-  const [filteredPersons, setFilteredPersons] = useState(persons)
 
   useEffect(() => {
     axios
       .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-        setFilteredPersons(response.data)
-      })
+      .then(response => setPersons(response.data))
   }, [])
 
-  const handleFormChange = (event, field) => {
-    const fieldValue = event.target.value
-    setNewPerson({...newPerson, [field]: fieldValue})
-  }
+  const handleFormChange = (event, field) =>
+    setNewPerson({...newPerson, [field]: event.target.value})
 
   useEffect(() => {
     console.log(`Current name: ${newPerson.name}, Current number: ${newPerson.number}`)
   }, [newPerson])
 
-  const handleFiltering = (e) => {
-    const keyword = e.target.value.toLowerCase()
-    setFilter(keyword)
-    setFilteredPersons(persons.filter(person => person.name.toLowerCase().includes(keyword)))
-  }
-
-  const isContactInPhonebook = () =>
-    persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
+  const handleFiltering = (event) =>
+    setFilteredPersons(persons.filter(person => person.name.toLowerCase().includes(event.target.value)))
 
   const addNewPerson = (event) => {
     event.preventDefault()
+    const { name, number } = newPerson
 
-    if (isContactInPhonebook()) {
-      alert(`${newPerson.name} is already in the phonebook`)
+    if (persons.some(person => person.name.toLowerCase() === name.toLowerCase())) {
+      alert(`${name} is already in the phonebook`)
       return
     }
+    const newPerson = {
+      id: persons.length + 1,
+      name,
+      number
+    };
 
-    setPersons(persons.concat(newPerson))
-    console.log('added', newPerson.name, newPerson.number)
-    setNewPerson({name: '', number: ''})
+    setPersons([...persons, newPerson])
+    setNewPerson({ name: '', number: '' })
   }
 
   return (
@@ -94,7 +79,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newPerson={newPerson} handleFormChange={handleFormChange} />
       <h2>Numbers</h2>
-      <Persons filteredPersons={persons} />
+      <Persons persons={persons} filter={filter} />
     </div>
   )
 }
