@@ -12,20 +12,14 @@ const Filter = ({ filter, handleFiltering }) => {
  )
 }
 
-const PersonForm = ({ addNewPerson, newName, handleNameChange, newNumber, handleNumberChange }) => {
+const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => {
   return (
     <form onSubmit={addNewPerson}>
       <div>
-        name: <input
-        value={newName}
-        onChange={handleNameChange}
-        />
+        name: <input value={newPerson.name} onChange={event => handleFormChange(event, 'name')} />
       </div>
       <div>
-        number: <input
-        value={newNumber}
-        onChange={handleNumberChange}
-        />
+        number: <input value={newPerson.number} onChange={event => handleFormChange(event, 'number')} />
       </div>
       <div>
         <button type="submit">add</button>
@@ -46,8 +40,7 @@ const Persons = ({ filteredPersons }) => {
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [newPerson, setNewPerson] = useState({name: '', number: ''})
   const [filter, setFilter] = useState('')
   const [filteredPersons, setFilteredPersons] = useState(persons)
 
@@ -60,15 +53,14 @@ const App = () => {
       })
   }, [])
 
-  const handleNameChange = (e) => {
-    console.log(e.target.value)
-    setNewName(e.target.value)
+  const handleFormChange = (event, field) => {
+    const fieldValue = event.target.value
+    setNewPerson({...newPerson, [field]: fieldValue})
   }
 
-  const handleNumberChange = (e) => {
-    console.log(e.target.value)
-    setNewNumber(e.target.value)
-  }
+  useEffect(() => {
+    console.log(`Current name: ${newPerson.name}, Current number: ${newPerson.number}`)
+  }, [newPerson])
 
   const handleFiltering = (e) => {
     const keyword = e.target.value.toLowerCase()
@@ -105,17 +97,11 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter
-      filter={filter}
-      handleFiltering={handleFiltering}
+        filter={filter}
+        handleFiltering={handleFiltering}
       />
       <h3>add a new</h3>
-      <PersonForm
-        addNewPerson={addNewPerson}
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
-      />
+      <PersonForm addNewPerson={addNewPerson} newPerson={newPerson} handleFormChange={handleFormChange} />
       <h2>Numbers</h2>
       <Persons filteredPersons={filteredPersons} />
     </div>
