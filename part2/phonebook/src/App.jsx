@@ -69,28 +69,19 @@ const App = () => {
   }
 
   const isContactInPhonebook = () =>
-    persons.some(obj => obj.name.toLowerCase() === newName.toLowerCase())
+    persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())
 
-  const addNewPerson = (e) => {
-    e.preventDefault()
+  const addNewPerson = (event) => {
+    event.preventDefault()
 
     if (isContactInPhonebook()) {
-      alert(`${newName} is already in the phonebook`)
+      alert(`${newPerson.name} is already in the phonebook`)
       return
     }
 
-    const newPerson = {
-      name: newName,
-      number: newNumber
-    }
-
-    const newPersons = persons.concat(newPerson)
-
-    setPersons(newPersons)
-    setFilteredPersons(newPersons)
-
-    setNewName('')
-    setNewNumber('')
+    setPersons(persons.concat(newPerson))
+    console.log('added', newPerson.name, newPerson.number)
+    setNewPerson({name: '', number: ''})
   }
 
   return (
@@ -103,7 +94,7 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newPerson={newPerson} handleFormChange={handleFormChange} />
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={persons} />
     </div>
   )
 }
