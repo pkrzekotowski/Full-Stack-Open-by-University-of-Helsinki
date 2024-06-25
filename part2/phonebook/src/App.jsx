@@ -53,20 +53,16 @@ const App = () => {
 
   const addNewPerson = (event) => {
     event.preventDefault()
-    const { name, number } = newPerson
 
-    if (persons.some(person => person.name.toLowerCase() === name.toLowerCase())) {
-      alert(`${name} is already in the phonebook`)
+    if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
+      alert(`${newPerson.name} is already in the phonebook`)
       return
     }
-    const newPerson = {
-      id: persons.length + 1,
-      name,
-      number
-    };
 
-    setPersons([...persons, newPerson])
-    setNewPerson({ name: '', number: '' })
+    newPerson.id = persons.length + 1,
+
+    setPersons(newPerson)
+    setNewPerson({ name: '', number: '', id: ''})
   }
 
   return (
