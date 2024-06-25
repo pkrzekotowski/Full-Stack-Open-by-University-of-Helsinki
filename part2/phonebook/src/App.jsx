@@ -49,7 +49,7 @@ const App = () => {
   }, [newPerson])
 
   const handleFiltering = (event) =>
-    setFilteredPersons(persons.filter(person => person.name.toLowerCase().includes(event.target.value)))
+    setFilter(event.target.value)
 
   const addNewPerson = (event) => {
     event.preventDefault()
