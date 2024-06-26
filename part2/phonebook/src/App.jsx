@@ -4,17 +4,17 @@ import axios from 'axios'
 const Filter = ({ filter, handleFiltering }) => <div>filter shown with: <input value={filter} onChange={handleFiltering} /> </div>
 
 const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => (
-    <form onSubmit={addNewPerson}>
-      <div>
-        name: <input value={newPerson.name} onChange={event => handleFormChange(event, 'name')} />
-      </div>
-      <div>
-        number: <input value={newPerson.number} onChange={event => handleFormChange(event, 'number')} />
-      </div>
-      <div>
-        <button type="submit">add</button>
-      </div>
-    </form>
+  <form onSubmit={addNewPerson}>
+    <div>
+      name: <input value={newPerson.name} onChange={event => handleFormChange(event, 'name')} />
+    </div>
+    <div>
+      number: <input value={newPerson.number} onChange={event => handleFormChange(event, 'number')} />
+    </div>
+    <div>
+      <button type="submit">add</button>
+    </div>
+  </form>
 )
 
 const Persons = ({ persons, keyword }) => (
@@ -64,6 +64,7 @@ const App = () => {
     }
 
     setPersons(persons.concat(personObject))
+    console.log('added new person:', `name: ${name}, phone: ${number}, id: ${personObject.id}`)
     setNewPerson({ name: '', number: '', id: ''})
   }
 
