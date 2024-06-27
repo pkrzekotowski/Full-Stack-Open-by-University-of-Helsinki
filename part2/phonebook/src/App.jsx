@@ -60,12 +60,16 @@ const App = () => {
     const personObject = {
       name,
       number,
-      id: persons.length + 1
     }
 
-    setPersons(persons.concat(personObject))
-    console.log('added new person:', `name: ${name}, phone: ${number}, id: ${personObject.id}`)
-    setNewPerson({ name: '', number: '', id: ''})
+    axios
+      .post('http://localhost:3001/persons', personObject)
+      .then(response => {
+        const note = response.data
+        setPersons(persons.concat(note))
+        console.log('added new person:', `name: ${name}, phone: ${number}, id: ${personObject.id}`)
+        setNewPerson({ name: '', number: '', id: ''})
+      })
   }
 
   return (
