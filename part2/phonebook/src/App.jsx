@@ -17,19 +17,18 @@ const PersonForm = ({ addNewPerson, newPerson, handleFormChange }) => (
   </form>
 )
 
-const Persons = ({ persons, keyword }) => (
+const Persons = ({ person, handleDeletion }) => (
   <div>
-    {persons
-        .filter(person => person.name.toLowerCase().includes(keyword.toLowerCase()))
-        .map(person => <div key={person.id}>{person.name} {person.number}</div>)
-      }
-  </div>
+    {person.name} {person.number} <button onClick={() => handleDeletion(person.id, person.name)} >delete</button>
+   </div>
 )
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newPerson, setNewPerson] = useState({name: '', number: '', id: ''})
   const [filter, setFilter] = useState('')
+
+  const filteredPersons = persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
 
   useEffect(() => {
     personsService
@@ -48,10 +47,20 @@ const App = () => {
 
   const handleFiltering = (e) => setFilter(e.target.value)
 
+  const handleDeletion = (id, name) => {
+    if (window.confirm(`Delete ${name}?`) === false)
+      return
+
+    personsService
+      .remove(id)
+      .then(removedPerson =>
+        setPersons(persons.filter(person => person.id !== removedPerson.id))
+      )
+  }
+
   const addNewPerson = (e) => {
     e.preventDefault()
     const { name, number } = newPerson
-
     if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
       alert(`${newPerson.name} is already in the phonebook`)
       return
@@ -70,8 +79,6 @@ const App = () => {
       })
   }
 
-  console.log(persons)
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -79,7 +86,9 @@ const App = () => {
       <h3>add a new</h3>
       <PersonForm addNewPerson={addNewPerson} newPerson={newPerson} handleFormChange={handleFormChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} keyword={filter} />
+      {filteredPersons.map(person =>
+        <Persons key={person.id} person={person} handleDeletion={handleDeletion} />
+      )}
     </div>
   )
 }

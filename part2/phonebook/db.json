@@ -1,49 +1,19 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": "2"
-    },
-    {
-      "name": "Dan Abramov",
-      "number": "12-43-234345",
-      "id": "3"
-    },
-    {
-      "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
-      "id": "4"
-    },
-    {
-      "id": "5c2f",
+      "id": "f982",
       "name": "Jon Snow",
-      "number": "33333"
+      "number": "23132131"
     },
     {
-      "id": "d9b5",
-      "name": "Artur Hellon",
-      "number": "333333333"
+      "id": "3a9d",
+      "name": "Arya Stark",
+      "number": "423423423"
     },
     {
-      "id": "ae44",
-      "name": "Jan Grzechwa",
-      "number": "69"
-    },
-    {
-      "id": "7d3e",
-      "name": "new person",
-      "number": "32313"
-    },
-    {
-      "id": "44d5",
-      "name": "errr orrr",
-      "number": "332321"
+      "id": "f280",
+      "name": "Adam Adam",
+      "number": "321313"
     }
   ]
 }
