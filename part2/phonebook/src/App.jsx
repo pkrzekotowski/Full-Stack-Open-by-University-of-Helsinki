@@ -61,23 +61,39 @@ const App = () => {
   const addNewPerson = (e) => {
     e.preventDefault()
     const { name, number } = newPerson
-    if (persons.some(person => person.name.toLowerCase() === newPerson.name.toLowerCase())) {
-      alert(`${newPerson.name} is already in the phonebook`)
-      return
-    }
+    const isPersonInPhonebook = persons.some(person => person.name.toLowerCase() === name.toLowerCase())
 
-    const personObject = {
-      name,
-      number,
-    }
+    if (isPersonInPhonebook) {
 
-    personsService
-      .create(personObject)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setNewPerson({ name: '', number: '', id: ''})
-      })
+      if (window.confirm(`${newPerson.name} is already to the phonebook, replece the old number with a new one?`) === true) {
+        const person = persons.find(person => person.name.toLowerCase() === name.toLowerCase())
+        const changedPerson = {...person, number: number}
+        const id = person.id
+
+        personsService
+          .update(id, changedPerson)
+          .then(returnedPerson => {
+            console.log(returnedPerson)
+            setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setNewPerson({ name: '', number: '', id: ''})
+          })
+      } else {
+        return
+      }
+    } else {
+        const personObject = {
+          name,
+          number,
+        }
+
+        personsService
+          .create(personObject)
+          .then(returnedPerson => {
+            setPersons(persons.concat(returnedPerson))
+            setNewPerson({ name: '', number: '', id: ''})
+     }) }
   }
+
 
   return (
     <div>
