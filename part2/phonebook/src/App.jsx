@@ -62,6 +62,10 @@ const App = () => {
     e.preventDefault()
     const { name, number } = newPerson
     const isPersonInPhonebook = persons.some(person => person.name.toLowerCase() === name.toLowerCase())
+    const personObject = {
+      name,
+      number,
+    }
 
     if (isPersonInPhonebook) {
 
@@ -70,30 +74,26 @@ const App = () => {
         const changedPerson = {...person, number: number}
         const id = person.id
 
-        personsService
+        return (
+          personsService
           .update(id, changedPerson)
           .then(returnedPerson => {
             console.log(returnedPerson)
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
             setNewPerson({ name: '', number: '', id: ''})
           })
-      } else {
-        return
-      }
-    } else {
-        const personObject = {
-          name,
-          number,
-        }
+        )
+      }}
 
+      return (
         personsService
           .create(personObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
             setNewPerson({ name: '', number: '', id: ''})
-     }) }
-  }
-
+          })
+      )
+    }
 
   return (
     <div>
